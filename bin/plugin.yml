@@ -1,0 +1,14 @@
+name: NewerWand
+author: [hockeymikey]
+version: 1.0.0
+description: Custom WorldEdit wand with minimal markers.
+main: mn.hockeymikey.newerwand.NewerWand
+softdepend: [WorldEdit]
+commands:
+  nw:
+    description: Basic command, does everything!  Is whatever you set it to.
+permissions:
+  newwander.use:
+    description: Be able to use the claim and wands.
+  newwander.admin:
+    description: Use admin commands.

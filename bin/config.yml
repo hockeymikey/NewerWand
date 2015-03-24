@@ -1,0 +1,107 @@
+#NewerWand config, created by hockeymikey.
+#If screwed up reload config and startover.
+
+#Don't touch the version.
+Version: '1'
+
+#Root command to be used instead of /NW
+#Planned feature.
+#Root_Command: 'nw'
+
+
+#Prefix of the plugin used in messages
+Message_Prefix: '&d[&6NW&d] &6'
+
+#If true player can only have 1 wand at a time and wand can not be dropped,
+#given to other, thrown in a chest, ect.
+Survival_Wand: true
+
+#Item of the wand
+Wand_Item: '283'
+
+#Display name of the wand.
+Wand_Display_Name: '&3Magic Wand'
+
+#Lore for the Wand
+Wand_Lore:
+    - '&bSuper Cool'
+    - '&bMagic wand'
+
+#Data for the Left point block marker
+Left_Point_Block: '95:5'
+
+#Data for the Right point block marker
+Right_Point_Block: '95:10'
+
+#Message when plugin is reloaded.
+config-reloaded: '&cReloaded NewerWand!'
+
+#If player doesn't have permissions.
+no-permissions: '&cNo perms!'
+
+#Wrong command/incorrect syntax
+incorrect-usage: '&6Incorrect format.  Check &c/claim help&6 for help'
+
+#Message for giving a wand to a player
+given-a-wand: '&6Start by either right or left clicking on your first point.'
+
+
+#Help menu (/nw help)
+#If defining multiple messages, hover, ect. in a line and a unique number at the end.
+#For example - message1, message2, ect.
+Help_Menu:
+   - line:
+     message: '&d&m-----------------------&r&d[&6 NW &d]&m-------------------------'
+   - line:
+     message: '&d/NW &7- &6Get a magic wand.'
+     suggest: '/nw'
+     hover: '&eUse to get a magic wand\n&eand select a region.'
+   - line:
+     message: '&4/NW Help &7- Gives you the help menu.'
+     suggest: '/nw help'
+     hover: '&eGives the help menu\n&ewhich you are looking at.'
+   - line:
+     message: '&4/NW Reload &7- Reloads the plugin configs'
+     suggest: '/nw reload'
+     hover: '&eReloads the plugin.'
+   - line:
+     message: '&4/NW About &7- Gives info about the plugin.'
+     suggest: '/nw about'
+     hover: '&eGives info about the\n&eplugin and the creator, hockeymikey.'
+   - line:
+     message: '&d&m-----------------------------------------------------'
+
+#If inventory is full and can't give the wand.
+Full-Inventory: 'Your inventory is full. Make room for the wand.'
+
+#Message sent when wand is removed.
+Wand_Removed_Message: 'Wand removed, selecting cancelled.'
+
+#Message if the player already has the wand
+Already-Have-Wand: 'You already have the magic wand!'
+
+
+#When plugin shuts down and player's claim guides are reverted back to default blocks
+Plugin_ShutDown_Cancel_Claiming: 'Claiming cancelled, plugin shutting down.'
+
+## Left Point Set ##
+
+Left_Point_Message: 
+    - line:
+      message1: '&d[&6NW&d] '
+      hover1: '&eClick to get help.'
+      suggest: 'nw help'
+      message2: '&6Left Point set.'
+      hover2: '&eLeft point was set, can you see it?'
+
+
+
+## Right Point Messages ##
+
+Right_Point_Message:
+    - line:
+      message1: '&d[&6NW&d] '
+      hover1: '&eClick to get help.'
+      suggest: 'nw help'
+      message2: '&6Right Point set.'
+      hover2: '&eRight point was set, can you see it?'
