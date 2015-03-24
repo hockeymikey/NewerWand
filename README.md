@@ -1,4 +1,4 @@
-Main page: ???
+<b>Main page:</b> ???
 
 A watered down version of my first plugin, New Wand.
 
@@ -9,14 +9,18 @@ but not limited to, wand lore, display name, item used, plugin prefix.
 It also includes a visual to see where you are selecting.  A fake block is placed on the locations of the 
 right and left click of the selection, which too can be configured to your liking.
 
-Permissions
-  newerwand.use: Player can use commands (/nw help and /nw) and wands.
-  newerwand.admin: Can reload the plugin.
+<h4><b style="text-decoration: underline;">Permissions</b></h4>
+<p>
+  <b>newerwand.use:</b> Player can use commands (/nw help and /nw) and wands.<br>
+  <b>newerwand.admin:</b> Can reload the plugin.
+  </p>
 
-Commands
-/NW: Gives the player a wand.
-/NW Help:  Bring up help menu.
-/NW Reload: Reload the plugin configs.
-/NW About: Gives a little info on the creator.
+<h4><b>Commands</b></h4>
+<p>
+<b>/NW:</b> Gives the player a wand.<br>
+<b>/NW Help</b> Bring up help menu.<br>
+<b>/NW Reload:</b> Reload the plugin configs.<br>
+<b>/NW About:</b> Gives a little info on the creator.
+</p>
 
-Paypal: hockeymikey@live.com
+<b>Paypal:</b> hockeymikey@live.com
