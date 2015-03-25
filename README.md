@@ -1,4 +1,4 @@
-<b>Main page:</b> ???
+<b>Main page:</b> <a href="http://www.spigotmc.org/resources/newer-wand.5236/">Here</a>
 
 A watered down version of my first plugin, New Wand.
 
