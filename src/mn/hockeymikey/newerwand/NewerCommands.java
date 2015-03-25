@@ -55,17 +55,22 @@ public class NewerCommands implements CommandExecutor {
 	String full = "";
 	String already = "";
 	String player = "";
+	
+
 
 	List<String> WandLore = NewerWand.WandLore;
 	String WandDisplayName = NewerWand.WandDisplayName;
 
 	List<Map<?, ?>> HelpMenu;
+	List<Map<?, ?>> SelectionCancelled;
+	List<Map<?, ?>> NoSelection;
 
 	Material WandItem = NewerWand.WandItem;
 
 	boolean checker = false;
 	
 	HashMap<String, HashMap<String, Location>> points = NewerWand.points;
+	HashMap<String, HashMap<String, Location>> OldPoints = NewerWand.OldPoints;
 
 	// HashMap<String, Boolean> mode = WandListener.mode;
 
@@ -84,6 +89,10 @@ public class NewerCommands implements CommandExecutor {
 		this.already = ChatColor.translateAlternateColorCodes('&', this.newerwand.getConfig().getString("Already-Have-Wand"));
 
 		this.HelpMenu = newerwand.getConfig().getMapList("Help_Menu");
+		
+		this.SelectionCancelled = newerwand.getConfig().getMapList("Selection_Cancelled");
+		
+		this.NoSelection = newerwand.getConfig().getMapList("No_Selection_To_Cancel");
 
 		}
 	
@@ -119,7 +128,46 @@ public class NewerCommands implements CommandExecutor {
 				p.sendMessage(prefix+ " NewerWand custom WorldEdit plugin. Created by Hockeymikey.");
 			}
 
+			
+			else if (strings[0].equalsIgnoreCase("cancel") || strings[0].equalsIgnoreCase("c")) {
+				
+				if (commandSender instanceof Player) {
+					if (commandSender.hasPermission("newerwand.use")) {
+						
+						if (OldPoints.containsKey(pl)) {
+							
+							for (Location bl : OldPoints.get(pl).values()) {
+								p.sendBlockChange(bl, bl.getBlock().getType(), bl.getBlock().getData());
+							}
+							
+							OldPoints.remove(pl);
+							
+							if (points.containsKey(pl)) {
+								points.remove(pl);
+							}
+							
+							Util(p, SelectionCancelled, "","","","");
+						}
+						
+						else {
+							Util(p, NoSelection, "","","","");
+						}
+						
+					}
+					
+					else {
+						p.sendMessage(noPermissions);
+					}
+				}
+				
+				else {
+					commandSender.sendMessage(prefix+"No console support for this command.");
+				}
 
+
+				
+			}
+			
 			else if (strings[0].equalsIgnoreCase("help") || strings[0].equalsIgnoreCase("h")) {
 
 				
@@ -313,6 +361,79 @@ public class NewerCommands implements CommandExecutor {
 		}
 
 		return false;
+
+	}
+	
+	public void Util (Player p, List<Map<?,?>> config, String v1, String v2, String v3, String v4) {
+
+		for (Map<?, ?> map : config) {
+
+			TextComponent message = null;
+			TextComponent line = null;
+			int NumOfMessages = 0;
+
+			// A single line
+			for (Map.Entry<?, ?> entry : map.entrySet()) {
+
+				if (Objects.toString(entry.getKey()).startsWith("message")) {
+
+					if (line == null && message != null) {
+						line = new TextComponent("");
+						line.addExtra(message);
+
+					}
+
+					else if (line != null && message != null) {
+
+						line.addExtra(message);
+
+					}
+
+					message = new TextComponent(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', entry.getValue().toString().replaceAll("{1}", v1)
+							.replaceAll("{2}", v2).replaceAll("{3}", v3).replaceAll("{4}", v4)  )));
+
+					NumOfMessages++;
+
+				}
+
+				else if (Objects.toString(entry.getKey()).startsWith("hover")) {
+
+					BaseComponent[] text = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', Objects.toString(entry.getValue()).replaceAll("{1}", v1)
+							.replaceAll("{2}", v2).replaceAll("{3}", v3).replaceAll("{4}", v4) ));
+					message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, text));
+
+				}
+
+				else if (Objects.toString(entry.getKey()).equals("suggest")) {
+					message.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, entry.getValue().toString().replaceAll("{1}", v1)
+							.replaceAll("{2}", v2).replaceAll("{3}", v3).replaceAll("{4}", v4) ));
+				}
+
+				else if (Objects.toString(entry.getKey()).equals("website")) {
+					message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, entry.getValue().toString().replaceAll("{1}", v1)
+							.replaceAll("{2}", v2).replaceAll("{3}", v3).replaceAll("{4}", v4) ));
+				}
+
+				else if (Objects.toString(entry.getKey()).equals("run")) {
+					message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, entry.getValue().toString().replaceAll("{1}", v1)
+							.replaceAll("{2}", v2).replaceAll("{3}", v3).replaceAll("{4}", v4) ));
+				}
+
+			}
+
+			if (NumOfMessages == 1 || map.size() == 1) {
+
+				p.spigot().sendMessage(message);
+			}
+
+			else {
+				line.addExtra(message);
+				p.spigot().sendMessage(line);
+
+			}
+
+		}
+	
 
 	}
 }

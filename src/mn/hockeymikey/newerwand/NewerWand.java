@@ -101,7 +101,7 @@ public class NewerWand extends JavaPlugin{
 	public void Variables() {
 		
 		if (getConfig().contains("Verion")){
-			if (getConfig().getInt("Version") != 1) {
+			if (getConfig().getInt("Version") != 2) {
 				getServer().getConsoleSender().sendMessage(PluginPrefix+ChatColor.RED+"Config is outdated or too new.  Please reload it.");
 			}
 		}

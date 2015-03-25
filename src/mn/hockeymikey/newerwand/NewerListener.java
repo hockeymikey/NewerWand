@@ -192,10 +192,8 @@ public class NewerListener implements Listener {
 
 		if (Survival_Wand == true &&
 				event.getOldCursor().getType().equals(WandItem)
-				&& event.getOldCursor().getItemMeta().getLore()
-						.equals(WandLore)
-				&& event.getOldCursor().getItemMeta().getDisplayName()
-						.equals(WandDisplayName)
+				&& event.getOldCursor().hasItemMeta()
+				&& event.getOldCursor().getItemMeta().getLore().equals(WandLore)
 				&& event.getInventory().getType() != null
 				&& (event.getInventory().getType() == InventoryType.CHEST
 						|| event.getInventory().getType() == InventoryType.FURNACE
@@ -224,8 +222,7 @@ public class NewerListener implements Listener {
 
 		if (Survival_Wand == true &&
 				event.getCursor().getType().equals(WandItem)
-				&& event.getCursor().getItemMeta().getDisplayName()
-						.equals(WandDisplayName)
+				&& event.getCursor().hasItemMeta()
 				&& event.getCursor().getItemMeta().getLore().equals(WandLore)
 				&& event.getClickedInventory() != null
 				&& (event.getClickedInventory().getType() == InventoryType.CHEST
@@ -249,10 +246,8 @@ public class NewerListener implements Listener {
 		if (Survival_Wand == true &&
 				event.isShiftClick()
 				&& event.getCurrentItem().getType().equals(WandItem)
-				&& event.getCurrentItem().getItemMeta().getDisplayName()
-						.equals(WandDisplayName)
-				&& event.getCurrentItem().getItemMeta().getLore()
-						.equals(WandLore)
+				&& event.getCurrentItem().hasItemMeta()
+				&& event.getCurrentItem().getItemMeta().getLore().equals(WandLore)
 				&& event.getInventory().getType() != null
 				&& (event.getInventory().getType() == InventoryType.CHEST
 						|| event.getInventory().getType() == InventoryType.FURNACE
@@ -281,10 +276,8 @@ public class NewerListener implements Listener {
 
 		if (Survival_Wand == true && 
 				e.getItemDrop().getItemStack().getType().equals(WandItem)
-				&& e.getItemDrop().getItemStack().getItemMeta()
-						.getDisplayName().equals(WandDisplayName)
-				&& e.getItemDrop().getItemStack().getItemMeta().getLore()
-						.equals(WandLore)) {
+				&& e.getItemDrop().getItemStack().hasItemMeta()
+				&& e.getItemDrop().getItemStack().getItemMeta().getLore().equals(WandLore)) {
 
 			e.getItemDrop().remove();
 			e.getPlayer().sendMessage(prefix + WandRemoved);
@@ -305,9 +298,8 @@ public class NewerListener implements Listener {
 			for (ItemStack drops : e.getDrops()) {
 				if (drops.getType().equals(WandItem)
 						&& drops.hasItemMeta()
-						&& drops.getItemMeta().getLore().equals(WandLore)
-						&& drops.getItemMeta().getDisplayName()
-								.equals(WandDisplayName)) {
+						&& drops.getItemMeta().getLore().equals(WandLore)){
+					
 					remove.add(drops);
 				}
 			}

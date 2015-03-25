@@ -2,7 +2,7 @@
 #If screwed up reload config and startover.
 
 #Don't touch the version.
-Version: '1'
+Version: 2
 
 #Root command to be used instead of /NW
 #Planned feature.
@@ -57,15 +57,19 @@ Help_Menu:
      suggest: '/nw'
      hover: '&eUse to get a magic wand\n&eand select a region.'
    - line:
-     message: '&4/NW Help &7- Gives you the help menu.'
+     message: '&d/NW Help &7- &6Cancels your current selection.'
+     suggest: '/nw cancel'
+     hover: '&eCancels a selection and\n&eremoves the guide blocks.'
+   - line:
+     message: '&d/NW Help &7- &6Gives you the help menu.'
      suggest: '/nw help'
      hover: '&eGives the help menu\n&ewhich you are looking at.'
    - line:
-     message: '&4/NW Reload &7- Reloads the plugin configs'
+     message: '&d/NW Reload &7- &6Reloads the plugin configs'
      suggest: '/nw reload'
      hover: '&eReloads the plugin.'
    - line:
-     message: '&4/NW About &7- Gives info about the plugin.'
+     message: '&d/NW About &7- &6Gives info about the plugin.'
      suggest: '/nw about'
      hover: '&eGives info about the\n&eplugin and the creator, hockeymikey.'
    - line:
@@ -81,6 +85,22 @@ Wand_Removed_Message: 'Wand removed, selecting cancelled.'
 Already-Have-Wand: 'You already have the magic wand!'
 
 
+#Message when a player cancels selecting with /nw cancel
+Selection_Cancelled: 
+    - line:
+      message1: '&d[&6NW&d] '
+      hover: '&eClick to get help.'
+      suggest: '/nw help'
+      message2: '&6Selection was cancelled.'
+
+#If player tries to cancel a selection but he doesn't currently have one.
+No_Selection_To_Cancel: 
+    - line:
+      message1: '&d[&6NW&d] '
+      hover: '&eClick to get help.'
+      suggest: '/nw help'
+      message2: '&6No selection to cancel.'
+
 #When plugin shuts down and player's claim guides are reverted back to default blocks
 Plugin_ShutDown_Cancel_Claiming: 'Claiming cancelled, plugin shutting down.'
 
@@ -90,7 +110,7 @@ Left_Point_Message:
     - line:
       message1: '&d[&6NW&d] '
       hover1: '&eClick to get help.'
-      suggest: 'nw help'
+      suggest: '/nw help'
       message2: '&6Left Point set.'
       hover2: '&eLeft point was set, can you see it?'
 
@@ -102,6 +122,6 @@ Right_Point_Message:
     - line:
       message1: '&d[&6NW&d] '
       hover1: '&eClick to get help.'
-      suggest: 'nw help'
+      suggest: '/nw help'
       message2: '&6Right Point set.'
       hover2: '&eRight point was set, can you see it?'
