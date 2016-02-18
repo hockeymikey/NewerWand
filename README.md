@@ -1,6 +1,4 @@
-
 <img alt="" src="https://www.spigotmc.org/attachments/rlgswwh-png.40934/" style="width: 100%; height: 100%;" />
-
 
 <b>Main page:</b> <a href="http://www.spigotmc.org/resources/newer-wand.5236/">Here</a>
 
