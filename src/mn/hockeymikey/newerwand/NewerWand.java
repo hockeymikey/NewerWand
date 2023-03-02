@@ -23,9 +23,10 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.math.BlockVector3;
 
 /**
- * @author Mikey Hajostek
+ * @author hockeymikey
  *
  */
 public class NewerWand extends JavaPlugin{
@@ -67,8 +68,6 @@ public class NewerWand extends JavaPlugin{
 	    
 		Variables();
 
-		init();
-
 		getWorldEdit();
 		//getWorldGuard();
 
@@ -77,13 +76,8 @@ public class NewerWand extends JavaPlugin{
 
 		config = getConfig();
 		
-		System.out.print(RootCommand);
-
-//		if (RootCommand != null) {
-//			getCommand(RootCommand).setExecutor(new NewerCommands(this));
-//		}
-		
 		getCommand("nw").setExecutor(new NewerCommands(this));
+		init();
 
 	}
 
@@ -127,77 +121,22 @@ public class NewerWand extends JavaPlugin{
 //		}
 //		
 		if (getConfig().contains("Wand_Item")) {
-			int witem = Integer.parseInt(getConfig().getString("Wand_Item"));
-			WandItem = Material.getMaterial(witem);
+			WandItem = Material.matchMaterial(getConfig().getString("Wand_Item").toUpperCase());
+		} else {
+			WandItem = Material.GOLDEN_SWORD;
 		}
-		
-		else {
-			WandItem = Material.getMaterial(283);
-		}
-
-
-
-
-		// Block of the points
-		String lc = "";
 		
 		if (getConfig().contains("Left_Point_Block")) {
-			
-			lc = getConfig().getString("Left_Point_Block");
-	
+			LeftPointBlock = Material.matchMaterial(getConfig().getString("Left_Point_Block"));
+		} else {
+			LeftPointBlock = Material.LIME_STAINED_GLASS;
 		}
-		
-		else {
-			lc = "95:5";
-		}
-		
-		if (lc.contains(":")) {
-			String[] v2 = lc.split(":");
-			int block = Integer.parseInt(v2[0]);
-			LeftPointBlock = Material.getMaterial(block);
-
-			int data = Integer.parseInt(v2[1]);
-			LeftPBData = (byte) data;
-		}
-
-		else {
-			int lbb = Integer.parseInt(lc);
-			LeftPointBlock = Material.getMaterial(lbb);
-			LeftPBData = (byte) 0;
-		}
-
-		
-		String rc = "";
 		
 		if (getConfig().contains("Right_Point_Block")) {
-			
-			rc = getConfig().getString("Right_Point_Block");
-
+			RightPointBlock = Material.matchMaterial(getConfig().getString("Right_Point_Block"));
+		} else {
+			RightPointBlock = Material.PURPLE_STAINED_GLASS;
 		}
-		
-		else {
-			rc = "95:10";
-		}
-		
-
-		if (rc.contains(":")) {
-			String[] v2 = rc.split(":");
-
-			int rblock = Integer.parseInt(v2[0]);
-
-			RightPointBlock = Material.getMaterial(rblock);
-
-			int data = Integer.parseInt(v2[1]);
-			RightPBData = (byte) data;
-		}
-
-		else {
-			int lbb = Integer.parseInt(rc);
-			RightPointBlock = Material.getMaterial(lbb);
-			RightPBData = (byte) 0;
-		}
-
-
 
 		if (getConfig().contains("Wand_Lore")) {
 			
@@ -224,6 +163,10 @@ public class NewerWand extends JavaPlugin{
 		}
 		
 		
+	}
+	
+	public static BlockVector3 convertLocation(Location l) {
+		return BlockVector3.at(l.getX(), l.getY(), l.getZ());
 	}
 
 	public void reloadSettings() {

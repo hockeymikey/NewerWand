@@ -14,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -45,12 +46,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 
+import com.sk89q.worldedit.LocalSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.selector.CuboidRegionSelector;
 
 public class NewerListener implements Listener {
-
-
 
 	String prefix = "";
 
@@ -59,7 +62,6 @@ public class NewerListener implements Listener {
 	List<Map<?, ?>> LeftPointMessage;
 	
 	String WandRemoved = "";
-	
 
 	Material LeftPointBlock = NewerWand.LeftPointBlock;
 	byte LeftPBData = NewerWand.LeftPBData;
@@ -109,7 +111,6 @@ public class NewerListener implements Listener {
 			this.WandRemoved = "";
 		}
 		
-		
 		// Right point messages
 		if (newerwand.getConfig().contains("Right_Point_Message")) {
 			this.RightPointMessage = newerwand.getConfig().getMapList("Right_Point_Message");
@@ -151,23 +152,31 @@ public class NewerListener implements Listener {
 		
 	}
 	
+	void changeSelection(BlockVector3 p1, BlockVector3 p2, Player p) {
+		CuboidRegionSelector cuboid = new CuboidRegionSelector(BukkitAdapter.adapt(p.getWorld()));
+		cuboid.selectPrimary(p1, null);
+		cuboid.selectSecondary(p2, null);
+		LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(BukkitAdapter.adapt(p));
+		localSession.setRegionSelector(BukkitAdapter.adapt(p.getWorld()), cuboid);
+	}
+	
 	public void RevertBlocks(Player p) {
 		
-		if (OldPoints.containsKey(pl)) {
-			for (Location bl : OldPoints.get(pl).values()) {
-				p.sendBlockChange(bl, bl.getBlock().getType(), bl
-						.getBlock().getData());
+		if (OldPoints.containsKey(p.getName())) {
+			for (Location bl : OldPoints.get(p.getName()).values()) {
+				final BlockData blockData = Bukkit.createBlockData(bl.getBlock().getType());
+				p.sendBlockChange(bl, blockData);
 			}
+			OldPoints.remove(p.getName());
 		}
 		
-		if (points.containsKey(pl)) {
-			points.remove(pl);
+		if (points.containsKey(p.getName())) {
+			for (Location bl : points.get(p.getName()).values()) {
+				final BlockData blockData = Bukkit.createBlockData(bl.getBlock().getType());
+				p.sendBlockChange(bl, blockData);
+			}
+			points.remove(p.getName());
 		}
-		
-		if (OldPoints.containsKey(pl)) {
-			OldPoints.remove(pl);
-		}
-		
 	}
 	
 	@EventHandler
@@ -189,7 +198,6 @@ public class NewerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onChestDrag(InventoryDragEvent event) {
-
 		if (Survival_Wand == true &&
 				event.getOldCursor().getType().equals(WandItem)
 				&& event.getOldCursor().hasItemMeta()
@@ -313,11 +321,8 @@ public class NewerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void WandClick(PlayerInteractEvent e) {
-
 		if ((e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			
-			
-
 			Player p = (Player) e.getPlayer();
 			String pl = e.getPlayer().getName();
 			
@@ -325,8 +330,6 @@ public class NewerListener implements Listener {
 				points.put(pl, new HashMap<String, Location>() );
 			}
 
-			
-			
 			/** Start of math stuff **/
 				
 				Block block = e.getClickedBlock();
@@ -345,24 +348,21 @@ public class NewerListener implements Listener {
 							
 							if (ds.getKey().equals("left")) {
 								bl = LeftPointBlock;
-								bld = LeftPBData;
 							}
 							
 							else if (ds.getKey().equals("right")) {
 								bl = RightPointBlock;
-								bld = RightPBData;
 							}
 
-							
 							final Player fp= p;
-							final Material fbl = bl;
-							final Byte fbld = bld;
 							final Location fds = ds.getValue();
+							
+							final BlockData blockData = Bukkit.createBlockData(bl);
 							
 							Bukkit.getScheduler().scheduleSyncRepeatingTask(
 									NewerWand.getPlugin(), new Runnable() {
 										public void run() {
-											fp.sendBlockChange(fds, fbl, fbld);
+											fp.sendBlockChange(fds, blockData);
 										}
 									}, 4, -1);
 							break;
@@ -371,11 +371,11 @@ public class NewerListener implements Listener {
 				}
 
 
-				if (p.getItemInHand().hasItemMeta() 
-					&& p.getItemInHand().getItemMeta().hasDisplayName() 
-					&& (p.getItemInHand().getItemMeta().getDisplayName().equals(WandDisplayName)) 
-					&& (p.getItemInHand().getItemMeta().getLore().equals(WandLore)) 
-					&& p.getItemInHand().getType().equals(WandItem)) {
+				if (p.getInventory().getItemInMainHand() != null && p.getInventory().getItemInMainHand().hasItemMeta() 
+					&& p.getInventory().getItemInMainHand().getItemMeta().hasDisplayName() 
+					&& (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(WandDisplayName)) 
+					&& (p.getInventory().getItemInMainHand().getItemMeta().getLore().equals(WandLore)) 
+					&& p.getInventory().getItemInMainHand().getType().equals(WandItem)) {
 					
 
 					if (e.getAction() == Action.LEFT_CLICK_BLOCK
@@ -394,14 +394,9 @@ public class NewerListener implements Listener {
 						
 						//Region work
 						if (!points.get(pl).containsKey("right")) {
-							CuboidSelection cuboid = new CuboidSelection(
-									p.getWorld(), points.get(pl).get("left"), points.get(pl).get("left") );
-							we.setSelection(p, cuboid);
+							changeSelection(NewerWand.convertLocation(points.get(pl).get("left")), NewerWand.convertLocation(points.get(pl).get("left")),p);
 						} else {
-							CuboidSelection cuboid = new CuboidSelection(
-									p.getWorld(), points.get(pl).get("left"), points.get(pl).get("right"));
-							we.setSelection(p, cuboid);
-
+							changeSelection(NewerWand.convertLocation(points.get(pl).get("left")), NewerWand.convertLocation(points.get(pl).get("right")),p);
 						}
 						
 						e.setCancelled(true);
@@ -426,13 +421,10 @@ public class NewerListener implements Listener {
 
 						//If left is null
 						if (!points.get(pl).containsKey("left")) {
-							CuboidSelection cuboid = new CuboidSelection(p.getWorld(), points.get(pl).get("right"), points.get(pl).get("right"));
-							we.setSelection(p, cuboid);
+							changeSelection(NewerWand.convertLocation(points.get(pl).get("right")), NewerWand.convertLocation(points.get(pl).get("right")), p);
 
 						} else {
-							CuboidSelection cuboid = new CuboidSelection(p.getWorld(), points.get(pl).get("left"), points.get(pl).get("right"));
-							we.setSelection(p, cuboid);
-
+							changeSelection(NewerWand.convertLocation(points.get(pl).get("left")), NewerWand.convertLocation(points.get(pl).get("right")), p);
 						}
 						e.setCancelled(true);
 
@@ -448,17 +440,16 @@ public class NewerListener implements Listener {
 				if (!OldPoints.equals(points) && OldPoints.containsKey(pl)) {
 					for (Map.Entry<String, Location> ds: OldPoints.get(pl).entrySet()) {
 						Location dsf = ds.getValue();
-						p.sendBlockChange(dsf, dsf.getBlock().getType(), dsf.getBlock().getData());
+						final BlockData blockData = Bukkit.createBlockData(dsf.getBlock().getType());
+						p.sendBlockChange(dsf, blockData);
 						
-						final Player fp= p;
-						final Material fbl = dsf.getBlock().getType();
-						final Byte fbld = dsf.getBlock().getData();
+						final Player fp = p;
 						final Location fds = dsf;
 
 						Bukkit.getScheduler().scheduleSyncRepeatingTask(
 								NewerWand.getPlugin(), new Runnable() {
 									public void run() {
-										fp.sendBlockChange(fds, fbl, fbld);
+										fp.sendBlockChange(fds, blockData);
 									}
 								}, 3, -1);
 					
@@ -472,28 +463,24 @@ public class NewerListener implements Listener {
 					for (Map.Entry<String, Location> ds: points.get(pl).entrySet()) {
 						
 							Material bl = null;
-							Byte bld = null;
 							
 							if (ds.getKey() == "left") {
 								bl = LeftPointBlock;
-								bld = LeftPBData;
 							}
 							
 							else if (ds.getKey() == "right") {
 								bl = RightPointBlock;
-								bld = RightPBData;
 							}
 							
 							
 							final Player fp= p;
-							final Material fbl = bl;
-							final Byte fbld = bld;
 							final Location fds = ds.getValue();
+							final BlockData blockData = Bukkit.createBlockData(bl);
 
 							Bukkit.getScheduler().scheduleSyncRepeatingTask(
 									NewerWand.getPlugin(), new Runnable() {
 										public void run() {
-											fp.sendBlockChange(fds, fbl, fbld);
+											fp.sendBlockChange(fds, blockData);
 										}
 									}, 4, -1);
 							

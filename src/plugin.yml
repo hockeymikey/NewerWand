@@ -1,9 +1,10 @@
 name: NewerWand
 author: [hockeymikey]
-version: 1.1.0
+version: 1.2.0
 description: Custom WorldEdit wand with minimal markers.
 main: mn.hockeymikey.newerwand.NewerWand
 softdepend: [WorldEdit]
+api-version: 1.19
 commands:
   nw:
     description: Basic command, does everything!  Is whatever you set it to.

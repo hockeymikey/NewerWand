@@ -17,7 +17,7 @@ Message_Prefix: '&d[&6NW&d] &6'
 Survival_Wand: true
 
 #Item of the wand
-Wand_Item: '283'
+Wand_Item: 'GOLDEN_SWORD'
 
 #Display name of the wand.
 Wand_Display_Name: '&3Magic Wand'
@@ -28,10 +28,10 @@ Wand_Lore:
     - '&bMagic wand'
 
 #Data for the Left point block marker
-Left_Point_Block: '95:5'
+Left_Point_Block: 'LIME_STAINED_GLASS'
 
 #Data for the Right point block marker
-Right_Point_Block: '95:10'
+Right_Point_Block: 'PURPLE_STAINED_GLASS'
 
 #Message when plugin is reloaded.
 config-reloaded: '&cReloaded NewerWand!'

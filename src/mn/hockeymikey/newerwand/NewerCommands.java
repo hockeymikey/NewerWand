@@ -55,8 +55,6 @@ public class NewerCommands implements CommandExecutor {
 	String full = "";
 	String already = "";
 	String player = "";
-	
-
 
 	List<String> WandLore = NewerWand.WandLore;
 	String WandDisplayName = NewerWand.WandDisplayName;
